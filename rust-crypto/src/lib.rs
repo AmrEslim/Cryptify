@@ -14,6 +14,9 @@
 
 use std::os::raw::c_char;
 use std::ffi::CStr;
+use rand::RngCore;
+use rand::rngs::ThreadRng;
+use zeroize::Zeroize;
 
 // ============================================================================
 // CONSTANTS
@@ -57,19 +60,58 @@ use std::ffi::CStr;
 /// - salt_len: Size of the buffer
 /// 
 /// Returns: 0 on success, error code on failure
+/// 
+/// ===========================================================
+/// IMPLEMENTATION :
+/// ===========================================================
+
+
+/// Constants
+
+const KEY_SIZE: usize = 32;      // 32 bytes = 256 bits for AES-256
+const SALT_SIZE: usize = 16;     // 16 bytes = 128 bits (recommended)
+const NONCE_SIZE: usize = 12;    // 12 bytes = 96 bits for GCM mode
+
+// Argon2 parameters 
+const ARGON2_TIME_COST: u32 = 3;           // 3 iterations
+const ARGON2_MEMORY_COST: u32 = 65536;     // 64 MB (65536 KB)
+const ARGON2_PARALLELISM: u32 = 1;         // Single-threaded
+
+/// Error codes
+
+const SUCCESS: i32 = 0;
+const ERROR_NULL_POINTER: i32 = -1;
+const ERROR_INVALID_LENGTH: i32 = -2;
+const ERROR_ENCRYPTION_FAILED: i32 = -3;
+const ERROR_DECRYPTION_FAILED: i32 = -4;
+const ERROR_KEY_DERIVATION_FAILED: i32 = -5;
+
+
+
+/// Generate a cryptographically secure random salt
+/// # Safety
+/// - salt_out must be a valid pointer to a buffer of at least salt_len bytes
+/// - Caller must ensure buffer remains valid during this call
 #[unsafe(no_mangle)]
-pub extern "C" fn rust_generate_salt(
-    salt_out: *mut u8,
-    salt_len: usize
-) -> i32 {
+pub extern "C" fn rust_generate_salt(salt_out: *mut u8, salt_len: usize) -> i32 {
     // TODO: Implement salt generation
     // 1. Validate salt_out is not null
-    // 2. Validate salt_len (should be SALT_SIZE, typically 16 bytes)
+    if salt_out.is_null() {
+        return ERROR_NULL_POINTER;
+    }
+    // 2. Validate salt_len (should be SALT_SIZE, typically 16 bytes)#
+    if salt_len != SALT_SIZE {
+        return ERROR_INVALID_LENGTH;
+    }
     // 3. Create a slice from the raw pointer
+    let salt_slice = unsafe {
+        std::slice::from_raw_parts_mut(salt_out, salt_len)
+    };
     // 4. Use rand::thread_rng().fill(slice) to generate random bytes
+    let mut rng = rand::thread_rng();
+    rng.fill_bytes(salt_slice);
     // 5. Return success
-    
-    unimplemented!("Generate random salt for key derivation")
+    SUCCESS
 }
 
 /// Generate a cryptographically secure random nonce

@@ -38,7 +38,7 @@ This guide will walk you through building a secure password manager that leverag
 - **CMake**: Version 3.15+
 - **Docker**: Docker Desktop or Docker Engine
 - **Git**: For version control
-- **Text Editor/IDE**: VS Code, CLion, or your preferred IDE
+- **Text Editor/IDE**: VS Code, CLion, or your preferred IDE "VIM? ;)"
 
 ---
 
