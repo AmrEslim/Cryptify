@@ -1,11 +1,7 @@
 
-# Rust
-rust-crypto/target/
-rust-crypto/Cargo.lock
-
 # C++
-cpp-core/build/
-cpp-core/cmake-build-*/
+build/
+cmake-build-*/
 *.o
 *.obj
 *.exe
