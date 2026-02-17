@@ -47,7 +47,7 @@ dataBase::~dataBase(){
     }
 };
 
-bool dataBase::addUser(const std::string &username, const std::string &hash, const std::string &salt){
+bool dataBase::addUser(const std::string &username, const std::vector<uint8_t> &hash, const std::vector<uint8_t> &salt){
     std::cout << "adding a new user to the database. \n";
     const char* sql = "INSERT INTO users (username, password_hash, salt) VALUES (?, ?, ?);";
     sqlite3_stmt* stmt; ////what is this ??

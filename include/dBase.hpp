@@ -25,7 +25,7 @@ public:
     dataBase(const dataBase &) = delete;
     dataBase &operator=(const dataBase &) = delete;
 
-    bool addUser(const std::string &username, const std::string &hash, const std::string &salt);
+    bool addUser(const std::string &username, const std::vector<uint8_t> &hash, const std::vector<uint8_t> &salt);
     bool PrintUser(const std::string &username); // just for testing .....
     bool getUser(const std::string &username, UserQuerey &uoutData);
     bool addSecret(int userId, const std::string &title, const std::vector<uint8_t> &encryptedData, const std::vector<uint8_t> &iv);

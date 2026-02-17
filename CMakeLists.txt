@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(Cryptify VERSION 1.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenSSL REQUIRED)
@@ -12,6 +12,7 @@ add_executable(cryptify_test
     src/main.cpp
     src/dBase.cpp
     src/CryptoManager.cpp
+    src/CLI.cpp
 )
 # Link imported targets (this automatically handles include paths and linking)
 target_link_libraries(cryptify_test PRIVATE 
@@ -20,7 +21,7 @@ target_link_libraries(cryptify_test PRIVATE
     SQLite::SQLite3
 )
 # Tell the compiler where local headers are located
-target_include_directories(cryptify_test PRIVATE include)
+target_include_directories(cryptify_test PRIVATE include stdc++exp)
 
 # Windows specific libraries needed for Rust
 if(WIN32)
