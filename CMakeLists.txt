@@ -11,6 +11,7 @@ find_package(SQLite3 REQUIRED)
 add_executable(cryptify_test
     src/main.cpp
     src/dBase.cpp
+    src/CryptoManager.cpp
 )
 # Link imported targets (this automatically handles include paths and linking)
 target_link_libraries(cryptify_test PRIVATE 
